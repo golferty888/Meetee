@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 const appName = 'Meetee';
 
 void main() {
-  runApp(new MaterialApp(
+  runApp(MaterialApp(
     title: appName,
     home: ChooseType(),
   ));
@@ -14,19 +14,19 @@ void main() {
 
 class ChooseType extends StatefulWidget {
   @override
-  _ChooseTypeState createState() => new _ChooseTypeState();
+  _ChooseTypeState createState() => _ChooseTypeState();
 }
 
 class _ChooseTypeState extends State<ChooseType> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text('Choose seat type')),
-      body: new ListView(
+    return Scaffold(
+      appBar: AppBar(title: Text('Choose seat type')),
+      body: ListView(
         children: <Widget>[
-          new ListTile(),
-          new ListTile(
-            title: new RaisedButton(
+          ListTile(),
+          ListTile(
+            title: RaisedButton(
               child: Text('Single table'),
               onPressed: () {
                 Navigator.push(
@@ -38,8 +38,8 @@ class _ChooseTypeState extends State<ChooseType> {
               },
             ),
           ),
-          new ListTile(
-              title: new RaisedButton(
+          ListTile(
+              title: RaisedButton(
             child: Text('Room type A'),
             onPressed: () {
               Navigator.push(
@@ -64,17 +64,17 @@ class ChooseTime extends StatefulWidget {
 }
 
 class _ChooseTimeState extends State<ChooseTime> {
-  DateTime _date = new DateTime.now();
-  TimeOfDay _time = new TimeOfDay.now();
+  DateTime _date = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(2019),
-        lastDate: new DateTime(2020));
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2019),
+        lastDate: DateTime(2020));
     if (picked != null) {
-      print('Selected date: ' + new DateFormat('yyyy-MM-dd').format(_date));
+      print('Selected date: ' + DateFormat('yyyy-MM-dd').format(_date));
       setState(() {
         _date = picked;
       });
@@ -96,29 +96,29 @@ class _ChooseTimeState extends State<ChooseTime> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Select Date/Time'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Select Date/Time'),
       ),
-      body: new ListView(
+      body: ListView(
         children: <Widget>[
-          new ListTile(
-            title: new Text('Seat type: ${widget.seatType}'),
+          ListTile(
+            title: Text('Seat type: ${widget.seatType}'),
           ),
-          new ListTile(
-            title: new Text(
-                'Date select: ' + new DateFormat('yyyy-MM-dd').format(_date)),
-            subtitle: new RaisedButton(
-              child: new Text('Select date'),
+          ListTile(
+            title:
+                Text('Date select: ' + DateFormat('yyyy-MM-dd').format(_date)),
+            subtitle: RaisedButton(
+              child: Text('Select date'),
               onPressed: () {
                 _selectDate(context);
               },
             ),
           ),
-          new ListTile(
-            title: new Text('Date select: ${_time.toString()}'),
-            subtitle: new RaisedButton(
-              child: new Text('Select time'),
+          ListTile(
+            title: Text('Date select: ${_time.toString()}'),
+            subtitle: RaisedButton(
+              child: Text('Select time'),
               onPressed: () {
                 _selectTime(context);
               },
@@ -126,7 +126,7 @@ class _ChooseTimeState extends State<ChooseTime> {
           ),
         ],
       ),
-      bottomNavigationBar: new RaisedButton(
+      bottomNavigationBar: RaisedButton(
         color: Colors.greenAccent,
         child: Text('Reserve !'),
         onPressed: () {
@@ -135,7 +135,7 @@ class _ChooseTimeState extends State<ChooseTime> {
               MaterialPageRoute(
                   builder: (context) => ChooseSeat(
                         seatType: '${widget.seatType}',
-                        date: new DateFormat('yyyy-MM-dd').format(_date),
+                        date: DateFormat('yyyy-MM-dd').format(_date),
                         time: '${_time.toString()}',
                       )));
         },
@@ -159,20 +159,20 @@ class ChooseSeat extends StatefulWidget {
 class _ChooseSeatState extends State<ChooseSeat> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Result'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Result'),
       ),
-      body: new ListView(
+      body: ListView(
         children: <Widget>[
-          new ListTile(
-            title: new Text('Seat type: ${widget.seatType}'),
+          ListTile(
+            title: Text('Seat type: ${widget.seatType}'),
           ),
-          new ListTile(
-            title: new Text('Date: ${widget.date}'),
+          ListTile(
+            title: Text('Date: ${widget.date}'),
           ),
-          new ListTile(
-            title: new Text('Time: ${widget.time}'),
+          ListTile(
+            title: Text('Time: ${widget.time}'),
           ),
         ],
       ),
