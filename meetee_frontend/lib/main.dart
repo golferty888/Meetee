@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 const appName = 'Meetee';
 
@@ -157,6 +159,35 @@ class ChooseSeat extends StatefulWidget {
 }
 
 class _ChooseSeatState extends State<ChooseSeat> {
+  String firstname, lastname;
+  final String url = 'https://swapi.co/api/people/3';
+  bool isData = false;
+
+  Future _fetchJSON() async {
+    var Response = await http.get(
+      url,
+      headers: {"Accept": "application/json"},
+    );
+    print('sdfsdf');
+    if (Response.statusCode == 200) {
+      String responseBody = Response.body;
+      var responseJSON = json.decode(responseBody);
+      firstname = responseJSON['firstname'];
+      lastname = responseJSON['lastname'];
+      isData = true;
+      setState(() {
+        print(firstname + lastname);
+      });
+    } else {
+      print('Something went wrong. \nResponse Code : ${Response.statusCode}');
+    }
+  }
+
+  @override
+  void initState() {
+    _fetchJSON();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,6 +205,10 @@ class _ChooseSeatState extends State<ChooseSeat> {
           ListTile(
             title: Text('Time: ${widget.time}'),
           ),
+          ListTile(
+            title: Text('name: $firstname'),
+            subtitle: Text('lastname: $lastname'),
+          )
         ],
       ),
     );
