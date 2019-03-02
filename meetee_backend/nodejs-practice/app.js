@@ -44,7 +44,8 @@ app.get('/api/user/:id', (request, response) => {
 });
 
 app.post('/api/create-user', (request, response) => {
-    if (request.body.first_name == null || request.body.last_name == null) {
+    if (request.body.first_name == null || 
+        request.body.last_name == null) {
         return response.sendStatus(400);
     }
     const firstname = request.body.first_name;
