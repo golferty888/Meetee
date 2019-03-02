@@ -7,12 +7,11 @@ const knex = require('./db/knex');
 const bodyParser = require('body-parser');
 
 app.use(express.static('./public'));
-
 app.use(morgan('short'));
-
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-function formatUser (data) {
+function formatUser(data) {
     const result = {
         firstname: data.firstname,
         lastname: data.lastname
@@ -44,39 +43,26 @@ app.get('/api/user/:id', (request, response) => {
         })
 });
 
-app.post('/api/user', (request, response) => {
+app.post('/api/create-user', (request, response) => {
+    if (request.body.first_name == null || request.body.last_name == null) {
+        return response.sendStatus(400);
+    }
+    const firstname = request.body.first_name;
+    const lastname = request.body.last_name;
     knex('User').insert({
-        firstname: 'Peem',
-        lastname: 'Pussii'
+        firstname: firstname,
+        lastname: lastname
     })
         .catch(err => {
             console.log(err);
         })
-        .then(function () {
-            knex.select().from('User')
-                .then(function (result) {
-                    response.send(result);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        })
-});
-
-app.post('/api/user-create', (request, response) => {
-    const firstname = request.body.first_name;
-    const lastname = request.body.last_name;
-    console.log("Trying to create a new User");
-    console.log("Firstname: " + firstname);
-    console.log("lastname: " + lastname);
+    response.send("You've successfully created the user.")
     response.end();
 });
 
 app.get('/', (request, response) => {
-    response.render('./public/form');
-    response.send('Hello This is my application.');
+    response.send('Hello, This is Meetee API.');
 })
-
 
 app.listen(PORT, URL, () => {
     console.log(`Listening on port: ${PORT}`);
