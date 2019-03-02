@@ -67,7 +67,8 @@ class ChooseTime extends StatefulWidget {
 
 class _ChooseTimeState extends State<ChooseTime> {
   DateTime _date = DateTime.now();
-  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay _time_start = TimeOfDay.now();
+  TimeOfDay _time_end = TimeOfDay.now();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -83,15 +84,28 @@ class _ChooseTimeState extends State<ChooseTime> {
     }
   }
 
-  Future<Null> _selectTime(BuildContext context) async {
+  Future<Null> _selectTimeStart(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
-      initialTime: _time,
+      initialTime: _time_start,
     );
     if (picked != null) {
-      print('Selected date: ${_time.toString()}');
+      print('Selected date: ${_time_start.toString()}');
       setState(() {
-        _time = picked;
+        _time_start = picked;
+      });
+    }
+  }
+
+  Future<Null> _selectTimeEnd(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: _time_end,
+    );
+    if (picked != null) {
+      print('Selected date: ${_time_end.toString()}');
+      setState(() {
+        _time_end = picked;
       });
     }
   }
@@ -118,11 +132,20 @@ class _ChooseTimeState extends State<ChooseTime> {
             ),
           ),
           ListTile(
-            title: Text('Date select: ${_time.toString()}'),
+            title: Text('Time select: ${_time_start.toString()}'),
             subtitle: RaisedButton(
               child: Text('Select time'),
               onPressed: () {
-                _selectTime(context);
+                _selectTimeStart(context);
+              },
+            ),
+          ),
+          ListTile(
+            title: Text('Time select: ${_time_end.toString()}'),
+            subtitle: RaisedButton(
+              child: Text('Select time'),
+              onPressed: () {
+                _selectTimeEnd(context);
               },
             ),
           ),
@@ -135,32 +158,35 @@ class _ChooseTimeState extends State<ChooseTime> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ChooseSeat(
+                  builder: (context) => Summary(
                         seatType: '${widget.seatType}',
                         date: DateFormat('yyyy-MM-dd').format(_date),
-                        time: '${_time.toString()}',
+                        time_start: '${_time_start.toString()}',
+                        time_end: '${_time_end.toString()}',
                       )));
         },
       ),
     );
   }
-
-  void something() => {print('Something happen')};
 }
 
-class ChooseSeat extends StatefulWidget {
+class Summary extends StatefulWidget {
   final String seatType;
   final String date;
-  final String time;
-  ChooseSeat({Key key, this.seatType, this.date, this.time}) : super(key: key);
+  final String time_start;
+  final String time_end;
+
+  const Summary(
+      {Key key, this.seatType, this.date, this.time_start, this.time_end})
+      : super(key: key);
 
   @override
-  _ChooseSeatState createState() => _ChooseSeatState();
+  _SummaryState createState() => _SummaryState();
 }
 
-class _ChooseSeatState extends State<ChooseSeat> {
-  String firstname, lastname;
-  final String url = 'https://swapi.co/api/people/3';
+class _SummaryState extends State<Summary> {
+  String name, gender;
+  final String url = 'https://swapi.co/api/people/1';
   bool isData = false;
 
   Future _fetchJSON() async {
@@ -168,15 +194,15 @@ class _ChooseSeatState extends State<ChooseSeat> {
       url,
       headers: {"Accept": "application/json"},
     );
-    print('sdfsdf');
     if (Response.statusCode == 200) {
       String responseBody = Response.body;
       var responseJSON = json.decode(responseBody);
-      firstname = responseJSON['firstname'];
-      lastname = responseJSON['lastname'];
+      print(responseJSON);
+      name = responseJSON['name'];
+      gender = responseJSON['gender'];
       isData = true;
       setState(() {
-        print(firstname + lastname);
+        print(name);
       });
     } else {
       print('Something went wrong. \nResponse Code : ${Response.statusCode}');
@@ -203,11 +229,14 @@ class _ChooseSeatState extends State<ChooseSeat> {
             title: Text('Date: ${widget.date}'),
           ),
           ListTile(
-            title: Text('Time: ${widget.time}'),
+            title: Text('Time start: ${widget.time_start}'),
           ),
           ListTile(
-            title: Text('name: $firstname'),
-            subtitle: Text('lastname: $lastname'),
+            title: Text('Time end: ${widget.time_end}'),
+          ),
+          ListTile(
+            title: Text('name: $name'),
+            subtitle: Text('gender: $gender'),
           )
         ],
       ),
