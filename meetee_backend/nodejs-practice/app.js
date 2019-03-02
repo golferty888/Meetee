@@ -31,7 +31,7 @@ app.get('/api/users', (request, response) => {
         })
 });
 
-app.get('/user/:id', (request, response) => {
+app.get('/api/user/:id', (request, response) => {
     var userId = request.params.id;
     console.log("Fetching User id:" + userId);
     knex.select().from('User').where('user_id', userId)
@@ -44,7 +44,7 @@ app.get('/user/:id', (request, response) => {
         })
 });
 
-app.post('/user', (request, response) => {
+app.post('/api/user', (request, response) => {
     knex('User').insert({
         firstname: 'Peem',
         lastname: 'Pussii'
@@ -63,7 +63,7 @@ app.post('/user', (request, response) => {
         })
 });
 
-app.post('/user-api', (request, response) => {
+app.post('/api/user-create', (request, response) => {
     const firstname = request.body.first_name;
     const lastname = request.body.last_name;
     console.log("Trying to create a new User");
